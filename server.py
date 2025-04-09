@@ -21,6 +21,10 @@ conn, addr = server.accept()
 print(f"Подключение от: {addr}")
 
 
+def HarrisonBenedickt():
+    return
+
+
 while True:
     request = json.loads(conn.recv(1024).decode())
     now = str(datetime.now())
@@ -65,11 +69,19 @@ while True:
             print("zapisal")
             IsLoginAndPassword = cursor.fetchall()
 
+            insert_name = "SELECT [Name] FROM [Clients] WHERE [login] = ?"
+            cursor.execute(insert_name, (login_name,))
+            name_from_bd = cursor.fetchone()
+            name_str = name_from_bd[0]
+
             if IsLoginAndPassword:
-                conn.send(f"Добро пожаловать {login_name}!".encode())
+                json_output_from_server = json.dumps({"name": name_str, "action": "IN"})
+                conn.send(json_output_from_server.encode())
 
             else:
-                conn.send(f"Нет такого пользователя".encode())
+                json_output_from_server = json.dumps({"name": "Нет такого пользователя", "action": "NO"})
+                conn.send(json_output_from_server.encode())
+
 
 
             insert_time = f"UPDATE [Clients] SET [Time_log] = ? WHERE [login] = ? AND [Password] = ?"
