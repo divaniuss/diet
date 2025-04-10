@@ -21,8 +21,15 @@ conn, addr = server.accept()
 print(f"Подключение от: {addr}")
 
 
-def HarrisonBenedickt():
-    return
+def HarrisonBenedickt(sex, age, ves, rost):
+    if sex == "male":
+        ansv = 88.36 + (13.4 * ves) + (4.8 * rost) - (5.7 * age)
+        return round(ansv, 2)
+    elif sex == "female":
+        ansv = 447.6 + (9.2 * ves) + (3.1 * rost) - (4.3 * age)
+        return round(ansv, 2)
+
+
 
 
 while True:
@@ -51,8 +58,64 @@ while True:
             print(f"Ошибка подключения: {e}")
             conn.send(f"Ошибка подключения: {e}".encode())
 
+    elif action == "ADDFOOD":
+        print("добавим еду")
+        login_name = request["data"]["login_name"]
+        food_name = request["data"]["food_name"]
+        calories_per_100g = request["data"]["calories_per_100g"]
+        grams_eaten = request["data"]["grams_eaten"]
+        total_calories = request["data"]["total_calories"]
 
-    if action == "LOGIN":
+        try:
+            conn_db = pyodbc.connect(dsn)
+            cursor = conn_db.cursor()
+
+            insert_query = "INSERT INTO  [Foods] ([login], [Name_food], [calories_per_100g], [grams_eaten], [total_calories]) VALUES (?, ?, ?, ?, ?)"
+            values = (login_name, food_name, calories_per_100g, grams_eaten, total_calories)
+            cursor.execute(insert_query, values)
+            cursor.commit()
+            conn_db.commit()
+            print("Записано")
+            result_str = "Данные успешно сохранены"
+            conn.send(result_str.encode())
+
+            cursor.close()
+            conn_db.close()
+        except Exception as e:
+            print(f"Ошибка подключения: {e}")
+            result_str = (f"Ошибка подключения: {e}")
+            conn.send(result_str.encode())
+
+
+    elif action == "ALLFOOD":
+        login_name = request["data"]["login_name"]
+
+        try:
+            conn_db = pyodbc.connect(dsn)
+            cursor = conn_db.cursor()
+
+            insert_all_food = "SELECT [Name_food], [grams_eaten], [total_calories] FROM [Foods] WHERE [login] = ?"
+            cursor.execute(insert_all_food, (login_name,))
+            rows = cursor.fetchall()
+
+            if not rows:
+                conn.send("Сегодня вы ещё ничего не ели.".encode())
+            else:
+                result_str = ""
+                for row in rows:
+                    result_str += f"\n{row[0]} — {row[1]} г, {row[2]} ккал"
+
+                conn.send(result_str.encode())
+
+        except Exception as e:
+            print(f"Ошибка подключения: {e}")
+            conn.send(f"Ошибка подключения: {e}".encode())
+
+
+    elif action == "DELETEFOOD":
+        print("")
+
+    elif action == "LOGIN":
         print("Вход:")
         print("")
         login_name = request["data"]["login_name"]
@@ -95,23 +158,25 @@ while True:
             print(f"Ошибка подключения: {e}")
             conn.send(f"Ошибка подключения: {e}".encode())
 
-    if action == "REGISTER":
+    elif action == "REGISTER":
 
         print("Регистрация:")
         login_name = request["data"]["login_name"]
         Password = request["data"]["password"]
         name = request["data"]["name"]
         sex = request["data"]["sex"]
-        age = request["data"]["age"]
-        ves = request["data"]["ves"]
-        rost = request["data"]["rost"]
+        age = int(request["data"]["age"])
+        ves = float(request["data"]["ves"])
+        rost = float(request["data"]["rost"])
+
+        goal_of_calories = HarrisonBenedickt(sex, age, ves, rost)
 
         try:
             conn_db = pyodbc.connect(dsn)
             cursor = conn_db.cursor()
 
-            insert_query = "INSERT INTO  [Clients] ([Login], [Password], [Name], [Sex], [Age], [Ves], [Rost]) VALUES (?, ?, ?, ?, ?, ?, ?)"
-            values = (login_name, Password, name, sex, age, ves, rost)
+            insert_query = "INSERT INTO  [Clients] ([Login], [Password], [Name], [Sex], [Age], [Ves], [Rost], [Goal]) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+            values = (login_name, Password, name, sex, age, ves, rost, goal_of_calories)
             cursor.execute(insert_query, values)
             cursor.commit()
             conn_db.commit()
@@ -129,7 +194,7 @@ while True:
                 result_str = (f"Ошибка подключения: {e}")
                 conn.send(result_str.encode())
 
-    if action == "BYE":
+    elif action == "BYE":
         print("Закрытие..")
         conn.send("Всего доброго".encode())
         break

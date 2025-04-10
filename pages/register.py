@@ -59,6 +59,10 @@ def register(root, client):
                 messagebox.showerror("Ошибка", f"Убедитесь что все поля введены")
                 return
 
+        if sex != "male" and sex != "female":
+            messagebox.showerror("Ошибка", "Ваш пол может быть Male или Female")
+            return
+
         if password != password_confirm or not login_name or not password:
             messagebox.showerror("Ошибка", "Пароли не совпадают или пустые поля")
             return

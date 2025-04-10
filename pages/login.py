@@ -35,9 +35,10 @@ def login(root, client):
         name = response["name"]
 
         if response["action"] == "IN":
-            InAccount(name, root)
+            InAccount(name, root, login_name, client)
 
         login_window.destroy()
+
 
 
     tk.Button(login_window, text="Войти", command=send_login).pack()
