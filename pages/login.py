@@ -1,10 +1,9 @@
 import json
-import socket
 import hashlib
 import tkinter as tk
 from tkinter import messagebox
 
-from pages.InAcc import InAccount
+from pages.InAccount.main_acc import InAccount
 from pages.center_windows import center_window
 
 
