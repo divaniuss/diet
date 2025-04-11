@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import messagebox
 
 from pages.InAccount.main_acc import InAccount
-from pages.center_windows import center_window
+from utilities.center_windows import center_window
 
 
 def login(root, client):

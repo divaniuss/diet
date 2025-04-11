@@ -2,8 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import json
 
-from pages.center_windows import center_window
-
+from utilities.center_windows import center_window
 
 
 def AddFood(root, client, login_name):

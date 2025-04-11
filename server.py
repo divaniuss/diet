@@ -29,9 +29,6 @@ def HarrisonBenedickt(sex, age, ves, rost):
         ansv = 447.6 + (9.2 * ves) + (3.1 * rost) - (4.3 * age)
         return round(ansv, 2)
 
-
-
-
 while True:
     request = json.loads(conn.recv(1024).decode())
     now = str(datetime.now())
@@ -76,8 +73,6 @@ while True:
             cursor.commit()
             conn_db.commit()
             print("Записано")
-            # result_str = "Данные успешно сохранены"
-            # conn.send(result_str.encode())
 
             cursor.close()
             conn_db.close()
@@ -141,13 +136,9 @@ while True:
             conn_db = pyodbc.connect(dsn)
             cursor = conn_db.cursor()
 
-
-
             insert_delete_food = "DELETE FROM [Foods] WHERE [login] = ?"
             cursor.execute(insert_delete_food, (login_name,))
             cursor.commit()
-            #
-            # conn.send(result_str.encode())
 
         except Exception as e:
             print(f"Ошибка подключения: {e}")
@@ -155,13 +146,10 @@ while True:
 
 
 
-
     elif action == "LOGIN":
         print("Вход:")
-        print("")
         login_name = request["data"]["login_name"]
         password = request["data"]["password"]
-        # name = request["data"]["name"]
 
         try:
             conn_db = pyodbc.connect(dsn)
@@ -185,7 +173,6 @@ while True:
             else:
                 json_output_from_server = json.dumps({"name": "Нет такого пользователя", "action": "NO"})
                 conn.send(json_output_from_server.encode())
-
 
 
             insert_time = f"UPDATE [Clients] SET [Time_log] = ? WHERE [login] = ? AND [Password] = ?"

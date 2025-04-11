@@ -1,17 +1,15 @@
 import json
-import socket
 import hashlib
 import tkinter as tk
 from tkinter import messagebox
 
-from pages.center_windows import center_window
+from utilities.center_windows import center_window
 
 
 def register(root, client):
     reg_window = tk.Toplevel(root)
     reg_window.title("Регистрация")
     center_window(reg_window, 300, 400)
-
 
     tk.Label(reg_window, text="Логин:").pack()
     login_entry = tk.Entry(reg_window)
@@ -48,27 +46,34 @@ def register(root, client):
 
     def send_register():
         login_name = login_entry.get().strip()
-        name = name_entry.get()
-        sex = sex_entry.get().lower()
-        age = age_entry.get()
-        ves = ves_entry.get()
-        rost = rost_entry.get()
-        password = password_entry.get()
-        password_confirm = password_confirm_entry.get()
+        name = name_entry.get().strip()
+        sex = sex_entry.get().strip().lower()
+        age = age_entry.get().strip()
+        ves = ves_entry.get().strip()
+        rost = rost_entry.get().strip()
+        password = password_entry.get().strip()
+        password_confirm = password_confirm_entry.get().strip()
 
-        register_data = [login_name, name, sex, age, ves, rost]
+        fields = [login_name, name, sex, age, ves, rost, password, password_confirm]
+        if not all(fields):
+            messagebox.showerror("Ошибка", "Убедитесь, что все поля заполнены.")
+            return
 
-        for item in register_data:
-            if not item:
-                messagebox.showerror("Ошибка", f"Убедитесь что все поля введены")
-                return
+        try:
+            age = int(age)
+            ves = float(ves)
+            rost = float(rost)
+        except ValueError:
+            messagebox.showerror("Ошибка", "Убедитесь что рост, вес и возраст введены корректно.")
+            return
+
 
         if sex != "male" and sex != "female":
             messagebox.showerror("Ошибка", "Ваш пол может быть Male или Female")
             return
 
-        if password != password_confirm or not login_name or not password:
-            messagebox.showerror("Ошибка", "Пароли не совпадают или пустые поля")
+        if password != password_confirm:
+            messagebox.showerror("Ошибка", "Пароли не совпадают.")
             return
 
         hashed_password = hashlib.sha256(password.encode()).hexdigest()

@@ -1,11 +1,8 @@
-import json
-import socket
 import tkinter as tk
-from tkinter import messagebox
 
 from pages.InAccount.components.add_food_section import AddFood
 from pages.InAccount.components.all_food_section import AllFood
-from pages.center_windows import center_window
+from utilities.center_windows import center_window
 
 
 def InAccount(name, root, login_name, client):

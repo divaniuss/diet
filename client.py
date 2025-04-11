@@ -2,11 +2,9 @@
 
 import json
 import socket
-import hashlib
 import tkinter as tk
-from tkinter import messagebox
 
-from pages.center_windows import center_window
+from utilities.center_windows import center_window
 from pages.login import login
 from pages.register import register
 
@@ -20,11 +18,6 @@ client.settimeout(3)
 root = tk.Tk()
 center_window(root, 400, 300)
 root.title("Welcome")
-
-
-
-
-# зарефакторить InAcc и сервер
 
 
 def exit_app():
