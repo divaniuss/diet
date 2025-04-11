@@ -5,11 +5,13 @@ import tkinter as tk
 from tkinter import messagebox
 
 from pages.InAcc import InAccount
+from pages.center_windows import center_window
+
 
 def login(root, client):
     login_window = tk.Toplevel(root)
     login_window.title("Логин")
-    login_window.geometry("300x150")
+    center_window(login_window, 300, 150)
 
     tk.Label(login_window, text="Логин:").pack()
     login_entry = tk.Entry(login_window)

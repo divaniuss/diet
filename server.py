@@ -126,7 +126,7 @@ while True:
                     result_str += f"\n{row[0]} — {row[1]} г, {row[2]} ккал"
                     total_calories_today += float(row[2])
 
-                conn.send(f"{result_str} \nВ сумме вы съели {total_calories_today} ккал.".encode())
+                conn.send(f"{result_str} \n\nВ сумме вы съели {total_calories_today} ккал.".encode())
 
         except Exception as e:
             print(f"Ошибка подключения: {e}")

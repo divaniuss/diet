@@ -6,6 +6,7 @@ import hashlib
 import tkinter as tk
 from tkinter import messagebox
 
+from pages.center_windows import center_window
 from pages.login import login
 from pages.register import register
 
@@ -17,8 +18,9 @@ client.connect((IP, PORT))
 client.settimeout(3)
 
 root = tk.Tk()
+center_window(root, 400, 300)
 root.title("Welcome")
-root.geometry("300x200")
+
 
 
 # как спавнить окно ПО ЦЕНТРУ БЛЯТЬ
@@ -32,9 +34,11 @@ def exit_app():
     root.destroy()
     client.close()
 
-tk.Button(root, text="Регистрация", command=lambda : register(root, client)).pack(pady=5)
-tk.Button(root, text="Логин", command=lambda : login(root, client)).pack(pady=5)
-tk.Button(root, text="Выход", command=exit_app).pack(pady=5)
+button_width = 30
+button_pad_y = 10
+tk.Button(root, text="Регистрация", width=button_width, command=lambda : register(root, client)).pack(pady=button_pad_y)
+tk.Button(root, text="Логин",  width=button_width, command=lambda : login(root, client)).pack(pady=button_pad_y)
+tk.Button(root, text="Выход",  width=button_width, command=exit_app).pack(pady=(button_pad_y, 20))
 
 root.mainloop()
 

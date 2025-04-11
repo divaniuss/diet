@@ -4,10 +4,14 @@ import hashlib
 import tkinter as tk
 from tkinter import messagebox
 
+from pages.center_windows import center_window
+
+
 def register(root, client):
     reg_window = tk.Toplevel(root)
     reg_window.title("Регистрация")
-    reg_window.geometry("300x400")
+    center_window(reg_window, 300, 400)
+
 
     tk.Label(reg_window, text="Логин:").pack()
     login_entry = tk.Entry(reg_window)

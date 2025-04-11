@@ -3,15 +3,18 @@ import socket
 import tkinter as tk
 from tkinter import messagebox
 
+from pages.center_windows import center_window
+
+
 def InAccount(name, root, login_name, client):
     login_in_window = tk.Toplevel(root)
     login_in_window.title(f"Добро пожаловать {name}")
-    login_in_window.geometry("350x300")
+    center_window(login_in_window, 350, 300)
 
     def AddFood():
         add_food_window = tk.Toplevel(root)
         add_food_window.title("Добавление")
-        add_food_window.geometry("300x280")
+        center_window(add_food_window, 300, 180)
         add_food_window.configure(bg="#f0f0f0")
 
         tk.Label(add_food_window, text="Добавьте то, что вы только что съели:").pack(pady=(10, 5))
@@ -60,7 +63,7 @@ def InAccount(name, root, login_name, client):
     def AllFood():
         all_food_window = tk.Toplevel(root)
         all_food_window.title("Ваш рацион сегодня:")
-        all_food_window.geometry("300x280")
+        center_window(all_food_window, 300, 280)
         all_food_window.configure(bg="#f0f0f0")
 
         tk.Label(all_food_window, text="Ваш рацион сегодня:").pack(pady=(10, 5))
