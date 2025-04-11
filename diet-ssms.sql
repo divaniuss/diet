@@ -11,7 +11,8 @@ CREATE TABLE [Clients]
 	[Sex] VARCHAR(20) NOT NULL,
 	[Age] INT NOT NULL,
 	[Ves] FLOAT NOT NULL,
-	[Rost] FLOAT NOT NULL
+	[Rost] FLOAT NOT NULL,
+    [Goal] FLOAT NOT NULL
 );
 
 

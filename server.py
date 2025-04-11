@@ -76,8 +76,8 @@ while True:
             cursor.commit()
             conn_db.commit()
             print("Записано")
-            result_str = "Данные успешно сохранены"
-            conn.send(result_str.encode())
+            # result_str = "Данные успешно сохранены"
+            # conn.send(result_str.encode())
 
             cursor.close()
             conn_db.close()
@@ -85,6 +85,24 @@ while True:
             print(f"Ошибка подключения: {e}")
             result_str = (f"Ошибка подключения: {e}")
             conn.send(result_str.encode())
+
+
+    elif action == "GOAL":
+        login_name = request["data"]["login_name"]
+
+        try:
+            conn_db = pyodbc.connect(dsn)
+            cursor = conn_db.cursor()
+
+            insert_name = "SELECT [Goal] FROM [Clients] WHERE [login] = ?"
+            cursor.execute(insert_name, (login_name,))
+            goal_from_bd = cursor.fetchone()
+            conn.send(str(goal_from_bd[0]).encode())
+
+        except Exception as e:
+            print(f"Ошибка подключения: {e}")
+            conn.send(f"Ошибка подключения: {e}".encode())
+
 
 
     elif action == "ALLFOOD":
@@ -98,14 +116,17 @@ while True:
             cursor.execute(insert_all_food, (login_name,))
             rows = cursor.fetchall()
 
+            total_calories_today= 0
+
             if not rows:
                 conn.send("Сегодня вы ещё ничего не ели.".encode())
             else:
                 result_str = ""
                 for row in rows:
                     result_str += f"\n{row[0]} — {row[1]} г, {row[2]} ккал"
+                    total_calories_today += float(row[2])
 
-                conn.send(result_str.encode())
+                conn.send(f"{result_str} \nВ сумме вы съели {total_calories_today} ккал.".encode())
 
         except Exception as e:
             print(f"Ошибка подключения: {e}")
@@ -114,6 +135,26 @@ while True:
 
     elif action == "DELETEFOOD":
         print("")
+        login_name = request["data"]["login_name"]
+
+        try:
+            conn_db = pyodbc.connect(dsn)
+            cursor = conn_db.cursor()
+
+
+
+            insert_delete_food = "DELETE FROM [Foods] WHERE [login] = ?"
+            cursor.execute(insert_delete_food, (login_name,))
+            cursor.commit()
+            #
+            # conn.send(result_str.encode())
+
+        except Exception as e:
+            print(f"Ошибка подключения: {e}")
+            conn.send(f"Ошибка подключения: {e}".encode())
+
+
+
 
     elif action == "LOGIN":
         print("Вход:")

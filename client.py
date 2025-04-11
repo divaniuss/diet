@@ -14,14 +14,13 @@ PORT = 4000
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((IP, PORT))
+client.settimeout(3)
 
 root = tk.Tk()
 root.title("Welcome")
 root.geometry("300x200")
 
 
-# добавить очистку хавчика от человека,
-# показ цели в лейбле начальном в профиле
 # как спавнить окно ПО ЦЕНТРУ БЛЯТЬ
 # зарефакторить InAcc и сервер
 
